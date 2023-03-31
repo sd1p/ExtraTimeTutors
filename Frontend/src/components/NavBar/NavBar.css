@@ -1,0 +1,123 @@
+.nav-bar {
+  width: 100%;
+  height: 65px;
+  border-bottom: 2px solid #f1f1f1;
+  padding: 0;
+  display: flex;
+  background-color: #F2E5E5;
+  justify-content: space-between;
+  box-sizing: content-box;
+}
+
+.logo {
+  padding: 18px 0;
+  margin-left: 15px;
+  background-color: inherit;
+}
+
+ul {
+  list-style: none;
+  display: flex;
+  flex-flow: row nowrap;
+  padding: 0 10px;
+  margin-top: 16px;
+  background-color: inherit;
+}
+
+li {
+  padding: 4px 18px;
+  background-color: inherit;
+}
+
+@media (max-width: 768px) {
+  ul {
+    flex-flow: column nowrap;
+    background-color: #F2E5E5;
+    position: fixed;
+    top: -10px;
+    right: 0;
+    height: 75vh;
+    width: 300px;
+    padding-top: 3.5rem;
+    border-radius: 5px;
+    box-shadow: 0px 3px 5px rgba(8, 36, 69, 0.16),
+      0px 0px 1px rgba(8, 36, 69, 0.32);
+    z-index: 3;
+  }
+  li {
+    color: #000;
+    padding: 10px 30px;
+  }
+  .burger-icon {
+    display: block;
+  }
+
+  .ul-show {
+    transform: translateX(0);
+    transition: all 0.2s linear;
+  }
+  .ul-close {
+    transform: translateX(100%);
+    transition: all 0.2s linear;
+  }
+
+  .burger{
+    padding-right: 1rem;
+    width: 2rem;
+    height: 2rem;
+    position: fixed;
+    top: 15px;
+    right: 20px;
+    display: flex;
+    justify-content: space-around;
+    flex-flow: column nowrap;
+    z-index: 10;
+  }
+}
+
+.burger {
+  padding-right: 1rem;
+  width: 2rem;
+  height: 2rem;
+  position: fixed;
+  top: 15px;
+  right: 20px;
+  display: flex;
+  justify-content: space-around;
+  flex-flow: column nowrap;
+  background-color: inherit;
+}
+
+.burger-icon-open-one {
+  transform: rotate(45deg);
+  position: relative;
+}
+.burger-icon-open-two {
+  transform: none;
+  opacity: 0;
+}
+.burger-icon-open-three {
+  transform: rotate(-45deg);
+  position: relative;
+}
+
+.burger-icon {
+  width: 2rem;
+  height: 0.25rem;
+  border-radius: 10px;
+  transform-origin: 1px;
+  transition: all 0.2s linear;
+}
+
+@media (min-width: 769px) {
+  .burger-icon {
+    display: none;
+  }
+  .burger{
+    z-index: -1;
+  }
+}
+
+a{
+  background-color: inherit;
+}

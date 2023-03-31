@@ -1,0 +1,12 @@
+flashtext==2.7
+Flask==2.2.3
+Flask_Cors==3.0.10
+nltk==3.8.1
+pandas==1.5.3
+pke==2.0.0
+pywsd==1.2.5
+PyYAML==6.0
+requests==2.28.2
+sorcery==0.2.2
+torch==2.0.0
+youtube_transcript_api==0.5.0

@@ -1,0 +1,23 @@
+{
+    "questions": [
+        {
+          "id": 1,
+          "question": "Q1 what is the ....?",
+          "options": ["Ans1","Ans2","Ans3","Ans4"],
+          "answer": 2 
+        },
+        {
+          "id": 2,
+          "question": "Q2 what is the ....?",
+          "options": ["Ans1","Ans2","Ans3","Ans4"],
+          "answer": 1 
+        },
+        {
+          "id": 3,  
+          "question": "Q3 what is the ....?",
+          "options": ["Ans1","Ans2","Ans3","Ans4"],
+          "answer": 0
+        }
+      
+    ]
+  }
