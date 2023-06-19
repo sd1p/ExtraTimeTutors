@@ -18,13 +18,17 @@ from flashtext import KeywordProcessor #FlashText is a Python library created sp
 import requests
 import json
 import random
-from pywsd.similarity import max_similarity
-from pywsd.lesk import adapted_lesk
+# from pywsd.similarity import max_similarity
+# from pywsd.lesk import adapted_lesk
 import os
 import yaml
 import torch
 from torch import package
 import pandas as pd
+import nltk
+
+nltk.download('wordnet')
+nltk.download('punkt')
 
 
 def summarize(text):
@@ -127,20 +131,59 @@ def mainModel(context):
         distractors.append(name)
     return distractors
 
-  def get_wordsense(sent,word):
-      word= word.lower()
+  # def get_wordsense(sent,word):
+  #     word= word.lower()
     
-      if len(word.split())>0:
-          word = word.replace(" ","_")
+  #     if len(word.split())>0:
+  #         word = word.replace(" ","_")
 
-      synsets = wn.synsets(word,'n')
-      if synsets:
-          wup = max_similarity(sent, word, 'wup', pos='n')
-          adapted_lesk_output =  adapted_lesk(sent, word, pos='n')
-          lowest_index = min (synsets.index(wup),synsets.index(adapted_lesk_output))
-          return synsets[lowest_index]
-      else:
-          return None
+  #     synsets = wn.synsets(word,'n')
+  #     if synsets:
+  #         wup = max_similarity(sent, word, 'wup', pos='n')
+  #         adapted_lesk_output =  adapted_lesk(sent, word, pos='n')
+  #         lowest_index = min (synsets.index(wup),synsets.index(adapted_lesk_output))
+  #         return synsets[lowest_index]
+  #     else:
+  #         return None
+ 
+
+  def get_wordsense(sent, word):
+    word = word.lower()
+    stop_words = set(stopwords.words('english'))
+
+    if len(word.split()) > 0:
+        word = word.replace(" ", "_")
+
+    sent_tokens = sent_tokenize(sent)
+    sent_tokens = [token.lower() for token in sent_tokens if token.lower() not in stop_words and token.isalnum()]
+
+    synsets = wn.synsets(word, 'n')
+    if synsets:
+        best_sense = None
+        max_similarity_score = -1
+
+        for sense in synsets:
+            signature = get_signature(sense)
+            similarity_score = compute_similarity(sent_tokens, signature)
+
+            if similarity_score > max_similarity_score:
+                max_similarity_score = similarity_score
+                best_sense = sense
+
+        return best_sense
+    else:
+        return None
+
+  def get_signature(sense):
+      signature = set()
+      for lemma in sense.lemmas():
+         signature.add(lemma.name().lower())
+      return signature
+
+  def compute_similarity(tokens, signature):
+     overlap = signature.intersection(tokens)
+     return len(overlap)
+
 
   key_distractor_list = {}
 
@@ -181,7 +224,7 @@ def mainModel(context):
   print(questions) 
   return questions   
     
-#mainModel("Mahatma Gandhi, also known as Mohandas Karamchand Gandhi, was an Indian independence leader who played a significant role in India's struggle for freedom from British rule. He was born on October 2, 1869, in Porbandar, Gujarat, India. Gandhi was a lawyer by profession, but he is best known for his non-violent civil disobedience approach to achieving political and social change. He began his political activism in South Africa, where he fought against discriminatory laws against Indians. He later returned to India in 1915 and became the leader of the Indian National Congress, which was at the forefront of the independence movement. Gandhi's philosophy of non-violent resistance, known as Satyagraha, influenced many movements for civil rights and freedom around the world, including the American civil rights movement led by Martin Luther King Jr. He believed that non-violent protest could achieve social and political change without resorting to violence or aggression. Gandhi's most significant contribution to India's struggle for independence was the Salt March of 1930. The British had imposed a salt tax, making it illegal for Indians to produce or sell salt. Gandhi led a 240-mile march to the Arabian Sea to collect salt, which galvanized the Indian people and brought international attention to their cause. Gandhi's legacy continues to inspire people around the world. He believed in the power of the individual to bring about change, and his teachings on non-violence and civil disobedience continue to influence social and political movements to this day. He was assassinated on January 30, 1948, but his ideas and philosophy live on, and he remains one of the most revered and respected figures in modern history.")
+mainModel("Mahatma Gandhi, also known as Mohandas Karamchand Gandhi, was an Indian independence leader who played a significant role in India's struggle for freedom from British rule. He was born on October 2, 1869, in Porbandar, Gujarat, India. Gandhi was a lawyer by profession, but he is best known for his non-violent civil disobedience approach to achieving political and social change. He began his political activism in South Africa, where he fought against discriminatory laws against Indians. He later returned to India in 1915 and became the leader of the Indian National Congress, which was at the forefront of the independence movement. Gandhi's philosophy of non-violent resistance, known as Satyagraha, influenced many movements for civil rights and freedom around the world, including the American civil rights movement led by Martin Luther King Jr. He believed that non-violent protest could achieve social and political change without resorting to violence or aggression. Gandhi's most significant contribution to India's struggle for independence was the Salt March of 1930. The British had imposed a salt tax, making it illegal for Indians to produce or sell salt. Gandhi led a 240-mile march to the Arabian Sea to collect salt, which galvanized the Indian people and brought international attention to their cause. Gandhi's legacy continues to inspire people around the world. He believed in the power of the individual to bring about change, and his teachings on non-violence and civil disobedience continue to influence social and political movements to this day. He was assassinated on January 30, 1948, but his ideas and philosophy live on, and he remains one of the most revered and respected figures in modern history.")
 
 ##########################PUNCHUATIONS####################
 
